@@ -1,6 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
 import jobSlice from "./jobSlice";
+import companySlice from "./companySlice";
+import applicationSlice from "./applicationSlice";
+import notificationsSlice from "./notificationSlice"; // Import notifications reducer
+
 import {
     persistStore,
     persistReducer,
@@ -10,10 +14,8 @@ import {
     PERSIST,
     PURGE,
     REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import companySlice from "./companySlice";
-import applicationSlice from "./applicationSlice";
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
     key: 'root',
@@ -22,14 +24,14 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-    auth:authSlice,
-    job:jobSlice,
-    company:companySlice,
-    application:applicationSlice
-})
+    auth: authSlice,
+    job: jobSlice,
+    company: companySlice,
+    application: applicationSlice,
+    notifications: notificationsSlice,  // ✅ Added notifications reducer
+});
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
     reducer: persistedReducer,
@@ -40,4 +42,6 @@ const store = configureStore({
             },
         }),
 });
+
 export default store;
+export const persistor = persistStore(store);

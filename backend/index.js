@@ -9,6 +9,8 @@ import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 import messagingRoutes from "./routes/messaging.js";
 import feedbackRoutes from "./routes/feedback.js";
+import notificationRoutes from "./routes/notifications.js"
+import morgan from "morgan";
 
 
 
@@ -19,6 +21,7 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(morgan("dev"))
 app.use(cookieParser());
 const corsOptions = {
     origin:'http://localhost:5173',
@@ -37,6 +40,7 @@ app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/messages", messagingRoutes);
 app.use("/api/v1/feedback", feedbackRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 
 
 
