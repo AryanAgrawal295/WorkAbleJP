@@ -4,37 +4,60 @@ import cloudinary from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
     try {
-        const { companyName } = req.body;
+        const { companyName, description, website, location, logo } = req.body;
+        const userId = req.user?._id; // Ensure user is authenticated
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "User not authenticated.",
+                success: false
+            });
+        }
+
         if (!companyName) {
             return res.status(400).json({
                 message: "Company name is required.",
                 success: false
             });
         }
+
+        // Check if a company with the same name already exists
         let company = await Company.findOne({ name: companyName });
         if (company) {
             return res.status(400).json({
-                message: "You can't register same company.",
+                message: "A company with this name already exists.",
                 success: false
-            })
-        };
+            });
+        }
+
+        // Create a new company with all possible fields
         company = await Company.create({
             name: companyName,
-            userId: req.id
+            description,
+            website,
+            location,
+            logo,
+            userId
         });
 
         return res.status(201).json({
             message: "Company registered successfully.",
             company,
             success: true
-        })
+        });
     } catch (error) {
-        console.log(error);
+        console.error("Error registering company:", error);
+        return res.status(500).json({
+            message: "Server error.",
+            success: false,
+            error: error.message
+        });
     }
-}
+};
+
 export const getCompany = async (req, res) => {
     try {
-        const userId = req.id; // logged in user id
+        const userId = req.user?._id; // logged in user id
         const companies = await Company.find({ userId });
         if (!companies) {
             return res.status(404).json({

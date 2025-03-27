@@ -4,7 +4,7 @@ import { Job } from "../models/job.model.js";
 export const postJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
-        const userId = req.id;
+        const userId = req.user?._id;
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
             return res.status(400).json({
@@ -101,8 +101,8 @@ export const getJobById = async (req, res) => {
 // ✅ Admin - Get jobs created by a specific admin
 export const getAdminJobs = async (req, res) => {
     try {
-        const adminId = req.id;
-        const jobs = await Job.find({ created_by: adminId })
+        const userId = req.user?._id;
+        const jobs = await Job.find({ created_by: userId })
             .populate("company")
             .sort({ createdAt: -1 });
 
