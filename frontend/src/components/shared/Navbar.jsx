@@ -62,7 +62,7 @@ const Navbar = () => {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Avatar className="cursor-pointer">
-                                    <AvatarImage src={user?.profile?.profilePhoto || "/default-avatar.png"} alt="Profile" />
+                                    <AvatarImage src={"https://res.cloudinary.com/dhy548whh/image/upload/v1743092307/turpaebeyjnijokcrdfy.png"} alt="Profile" />
                                 </Avatar>
                             </PopoverTrigger>
                             <PopoverContent className="w-80">

@@ -9,13 +9,25 @@ const UserNotifications = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await fetch('/api/notifications'); // Replace with your API endpoint
+                const response = await fetch('http://localhost:3000/api/v1/notifications/get-notifications', {
+                    method: "GET",
+                    credentials: "include", // ✅ This ensures cookies (token) are sent
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+        
                 const data = await response.json();
-                dispatch(setNotifications(data)); // Store in Redux
+                dispatch(setNotifications(data.notifications)); // ✅ Use data.notifications
             } catch (error) {
                 console.error("Failed to fetch notifications:", error);
             }
         };
+        
 
         fetchNotifications();
     }, [dispatch]);
