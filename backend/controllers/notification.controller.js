@@ -1,20 +1,26 @@
 import Notification from "../models/Notification.js";
 
 // Get all notifications for a user
-export const getUserNotifications = async (req, res) => {
+export const getNotifications = async (req, res) => {
     try {
-        const notifications = await Notification.find({ recipient: req.user._id }).sort({ createdAt: -1 });
+        console.log("User ID:", req.user._id); // Debugging Line
+        const notifications = await Notification.find({ user: req.user._id }).sort({ createdAt: -1 });
+        
+        console.log("Fetched Notifications:", notifications); // Debugging Line
+        
         res.status(200).json({ success: true, notifications });
     } catch (error) {
+        console.error("Error fetching notifications:", error);
         res.status(500).json({ success: false, message: "Error fetching notifications", error });
     }
 };
 
+
 // Create a new notification
 export const createNotification = async (req, res) => {
     try {
-        const { recipient, message, type } = req.body;
-        const notification = new Notification({ recipient, message, type });
+        const { user, message, type } = req.body;
+        const notification = new Notification({ user, message, type });
         await notification.save();
         res.status(201).json({ success: true, notification });
     } catch (error) {
