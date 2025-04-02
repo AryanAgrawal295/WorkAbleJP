@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
+        fullname: {
+            type: String,
+            required: true,
+            trim: true
+        },
         email: {
             type: String,
             required: true,
@@ -17,6 +22,12 @@ const userSchema = new mongoose.Schema(
             enum: ["student", "recruiter"],
             required: true,
         },
+        phoneNumber: {  // Added phone number field
+            type: String,
+            required: true,  // Make it mandatory if needed
+            unique: true,  // Ensure uniqueness if required
+            trim: true
+        },
         savedJobs: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +39,6 @@ const userSchema = new mongoose.Schema(
                 type: String
             }
         ]
-        // You can add additional fields like name, profile, etc.
     },
     { timestamps: true }
 );
