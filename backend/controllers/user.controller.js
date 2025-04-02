@@ -5,13 +5,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 // REGISTER
+
+
 export const createUser = async (req, res) => {
     try {
-        const { fullname, email, password, role, phoneNumber } = req.body;
+        const { fullname,email, password, role } = req.body;
 
         // Validate inputs
-        if (!fullname || !email || !password || !role || !phoneNumber) {
-            return res.status(400).json({ message: "All fields are required", success: false });
+         if (!fullname || !email || !password || !role) {
+          return res.status(400).json({ message: "All fields are required", success: false });
         }
 
         const existingUser = await User.findOne({ email });
@@ -21,7 +23,7 @@ export const createUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10); // Use 10 as salt rounds
 
-        const user = await User.create({ fullname, email, password: hashedPassword, role, phoneNumber });
+        const user = await User.create({ fullname,email, password:hashedPassword , role });
 
         res.status(201).json({ message: "User created successfully", success: true, user });
     } catch (error) {
@@ -29,6 +31,7 @@ export const createUser = async (req, res) => {
         res.status(500).json({ message: "Internal server error", success: false });
     }
 };
+
 
 // LOGIN
 export const loginUser = async (req, res) => {
@@ -76,40 +79,11 @@ export const getMyProfile = async (req, res) => {
     }
 };
 
-// UPDATE USER (Email cannot be changed)
-export const updateUser = async (req, res) => {
-    try {
-        const { fullname, password, role } = req.body;
-
-        // Fetch the existing user
-        const user = await User.findById(req.id);
-        if (!user) {
-            return res.status(404).json({ message: "User not found", success: false });
-        }
-
-        // Prevent email from being updated
-        if (req.body.email && req.body.email !== user.email) {
-            return res.status(400).json({ message: "Email cannot be changed", success: false });
-        }
-
-        // Update user details
-        if (fullname) user.fullname = fullname;
-        if (role) user.role = role;
-        if (password) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user.password = hashedPassword;
-        }
-
-        await user.save();
-
-        res.status(200).json({ message: "User updated successfully", success: true, user });
-    } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).json({ message: "Internal server error", success: false });
-    }
+// Dummy functions (Replace with your actual implementations)
+export const updateUser = (req, res) => {
+    res.send("updateUser controller not implemented yet");
 };
 
-// Dummy functions (Replace with your actual implementations)
 export const getNotifications = (req, res) => {
     res.send("getNotifications controller not implemented yet");
 };
