@@ -4,16 +4,19 @@ import { Feedback } from "../models/Feedback.js";
 export const submitFeedback = async (req, res) => {
     try {
         const userId = req.user?._id;
-        const { message, rating } = req.body;
+        const { feedback } = req.body;
+        console.log(req.body);
 
-        if (!message || !rating) {
+        if (!feedback ) {
             return res.status(400).json({ success: false, message: "Message and rating are required." });
+            
         }
 
-        const feedback = await Feedback.create({ user: userId, message, rating });
+        const message = await Feedback.create({ user: userId, feedback });
 
-        res.status(201).json({ success: true, message: "Feedback submitted successfully.", data: feedback });
+        res.status(201).json({ success: true, message: "Feedback submitted successfully.", data: message });
     } catch (error) {
+        console.error(error)
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
 };

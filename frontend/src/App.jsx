@@ -1,5 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './components/shared/Layout'; // Correct path
+import { Provider } from 'react-redux';  // ✅ Import Redux Provider
+import store from './redux/store.js'; // ✅ Import your Redux store
+
+import Layout from './components/shared/Layout';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import Home from './components/Home';
@@ -27,7 +30,7 @@ import UserNotifications from "./components/UserNotifications";
 const appRouter = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />, // ✅ Wrap routes with Layout
+    element: <Layout />,
     children: [
       { path: '/', element: <Home /> },
       { path: '/jobs', element: <Jobs /> },
@@ -44,7 +47,7 @@ const appRouter = createBrowserRouter([
   { path: '/login', element: <Login /> },
   { path: '/signup', element: <Signup /> },
 
-  // Admin routes (outside Layout for security)
+  // Admin routes
   { path: "/admin/companies", element: <ProtectedRoute><Companies /></ProtectedRoute> },
   { path: "/admin/companies/create", element: <ProtectedRoute><CompanyCreate /></ProtectedRoute> },
   { path: "/admin/companies/:id", element: <ProtectedRoute><CompanySetup /></ProtectedRoute> },
@@ -56,9 +59,11 @@ const appRouter = createBrowserRouter([
 
 function App() {
   return (
-    <main aria-live="polite">
-      <RouterProvider router={appRouter} />
-    </main>
+    <Provider store={store}>  {/* ✅ Wrap with Redux Provider */}
+      <main aria-live="polite">
+        <RouterProvider router={appRouter} />
+      </main>
+    </Provider>
   );
 }
 

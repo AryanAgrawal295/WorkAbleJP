@@ -1,57 +1,42 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { submitFeedback } from "../redux/feedbackSlice"; // Import action
+import { Button } from "./ui/button";
 
 const Feedback = () => {
-    const [feedback, setFeedback] = useState('');
-    const [message, setMessage] = useState('');
+    const [feedback, setFeedback] = useState("");
+    const dispatch = useDispatch();
+    const { message, error } = useSelector((state) => state.feedback); // Access feedback state
 
-    const handleSubmit = async () => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
         if (!feedback.trim()) {
-            setError("Please enter feedback");
             return;
         }
-        
-        setError(""); // Clear any previous error
-    
-        try {
-            const response = await fetch("'http://localhost:3000/api/v1/feedback/submit'", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ feedback }),
-            });
-    
-            const data = await response.json();
-    
-            if (response.ok) {
-                setMessage("Feedback submitted successfully!");
-                setFeedback(""); // Clear input field
-            } else {
-                setError(data.message || "Something went wrong!");
-            }
-        } catch (error) {
-            setError("Network error, please try again later.");
-        }
+
+        dispatch(submitFeedback( feedback )); // Dispatch action
+        setFeedback(""); // Clear input field after submission
     };
-    
-    
 
     return (
         <div>
             <p>Share your experience with job applications.</p>
             <form onSubmit={handleSubmit}>
-                <textarea 
-                    className='w-full border border-gray-300 rounded-lg p-2' 
-                    rows='4' 
-                    placeholder='Share your experience...'
-                    value={feedback} 
+                <textarea
+                    className="w-full border border-gray-300 rounded-lg p-2"
+                    rows="4"
+                    placeholder="Share your experience..."
+                    value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                 />
                 <br />
-                <Button type='submit' className='mt-2 bg-[#7209b7] hover:bg-[#5f32ad]'>Submit Feedback</Button>
+                <Button type="submit" className="mt-2 bg-[#7209b7] hover:bg-[#5f32ad]">
+                    Submit Feedback
+                </Button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="text-green-600">{message}</p>}
+            {error && <p className="text-red-600">{error}</p>}
         </div>
     );
 };

@@ -6,13 +6,14 @@ const feedbackSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    message: {
+    feedback: {
         type: String,
         required: true
     },
     rating: {
         type: Number,
         min: 1,
+        required:false,
         max: 5
     },
     createdAt: {
