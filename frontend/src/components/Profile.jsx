@@ -9,6 +9,7 @@ import AppliedJobTable from './AppliedJobTable'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
+import Feedback from './Feedback'
 
 const isResume = true;
 
@@ -63,18 +64,14 @@ const Profile = () => {
                 <AppliedJobTable />
             </div>
             
-            {/* Saved Jobs Section */}
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl my-5 p-8'>
-                <h1 className='font-bold text-lg'>Saved Jobs</h1>
-                <p className='text-gray-600'>This section will display jobs you have saved.</p>
-                {/* Future implementation: Map saved jobs here */}
-            </div>
+           
 
             {/* User Feedback Section */}
             <div className='max-w-4xl mx-auto bg-white rounded-2xl my-5 p-8'>
                 <h1 className='font-bold text-lg'>Your Feedback</h1>
-                <textarea className='w-full border border-gray-300 rounded-lg p-2' rows='4' placeholder='Share your experience...'></textarea>
-                <Button className='mt-2 bg-[#7209b7] hover:bg-[#5f32ad]'>Submit Feedback</Button>
+                <Feedback />
+               
+                
             </div>
 
             <UpdateProfileDialog open={open} setOpen={setOpen}/>

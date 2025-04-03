@@ -3,7 +3,7 @@ import { Feedback } from "../models/Feedback.js";
 // Submit feedback
 export const submitFeedback = async (req, res) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user?._id;
         const { message, rating } = req.body;
 
         if (!message || !rating) {
