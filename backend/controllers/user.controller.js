@@ -78,29 +78,35 @@ export const getMyProfile = async (req, res) => {
 
 // UPDATE USER (Email cannot be changed)
 export const updateUser = async (req, res) => {
-    try {
-        const { fullname, password, role } = req.body;
+    console.log("Update API hit!");  
+    console.log("Request Email:", req.body.email);  
+    console.log("Request Body:", req.body);  
 
-        // Fetch the existing user
-        const user = await User.findById(req.id);
+    try {
+        const { email, fullname, password, role, bio, skills } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required", success: false });
+        }
+
+        const user = await User.findOne({ email });
+
         if (!user) {
+            console.log("User not found");
             return res.status(404).json({ message: "User not found", success: false });
         }
 
-        // Prevent email from being updated
-        if (req.body.email && req.body.email !== user.email) {
-            return res.status(400).json({ message: "Email cannot be changed", success: false });
-        }
-
-        // Update user details
         if (fullname) user.fullname = fullname;
         if (role) user.role = role;
+        if (bio) user.bio = bio;
+        if (skills) user.skills = skills;
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
             user.password = hashedPassword;
         }
 
         await user.save();
+        console.log("User updated successfully");
 
         res.status(200).json({ message: "User updated successfully", success: true, user });
     } catch (error) {

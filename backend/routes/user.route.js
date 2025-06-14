@@ -22,7 +22,7 @@ router.post("/register", createUser);
 router.post("/login", loginUser);
 router.get("/logout", isAuthenticated, logoutUser);
 router.get("/me", isAuthenticated, getMyProfile);
-router.put("/update", isAuthenticated, updateUser);
+router.post("/update", isAuthenticated, updateUser);
 router.get("/notifications", isAuthenticated, getNotifications);
 router.delete("/notifications/:id", isAuthenticated, deleteNotification);
 router.post("/save-job/:jobId", isAuthenticated, saveJob);

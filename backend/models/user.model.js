@@ -22,10 +22,18 @@ const userSchema = new mongoose.Schema(
             enum: ["student", "recruiter"],
             required: true,
         },
-        phoneNumber: {  // Added phone number field
+        phoneNumber: {  
             type: String,
-            required: true,  // Make it mandatory if needed
-            unique: true,  // Ensure uniqueness if required
+            required: true,  
+            unique: true,  
+            trim: true
+        },
+        bio: {  // Added bio field
+            type: String,
+            trim: true
+        },
+        skills: {  // Added skills field
+            type: String,
             trim: true
         },
         savedJobs: [

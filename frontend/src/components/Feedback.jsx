@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { submitFeedback } from "../redux/feedbackSlice"; // Import action
+import { submitFeedback, clearMessages } from "../redux/feedbackSlice"; // Import action
 import { Button } from "./ui/button";
 
 const Feedback = () => {
@@ -15,9 +15,19 @@ const Feedback = () => {
             return;
         }
 
-        dispatch(submitFeedback( feedback )); // Dispatch action
+        dispatch(submitFeedback(feedback)); // Dispatch action
         setFeedback(""); // Clear input field after submission
     };
+
+    // Clear message after 3 seconds
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                dispatch(clearMessages());
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [message, dispatch]);
 
     return (
         <div>
